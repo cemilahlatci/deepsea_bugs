@@ -4,5 +4,5 @@ Flask
 openpyxl
 pandas
 gunicorn
-plotly.express
+plotly_express
 datetime
