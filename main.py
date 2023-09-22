@@ -4,17 +4,11 @@ import dash_bootstrap_components as dbc
 import dash_auth
 
 
-VALID_USERNAME_PASSWORD_PAIRS = {
-    'alphega': 'alphega'
-}
 
 app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.SPACELAB])
 server = app.server
 
-auth = dash_auth.BasicAuth(
-    app,
-    VALID_USERNAME_PASSWORD_PAIRS
-)
+
 
 sidebar = dbc.Nav(
             [
