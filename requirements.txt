@@ -6,3 +6,4 @@ pandas
 gunicorn
 plotly_express
 datetime
+dash-auth
