@@ -1,6 +1,8 @@
 import dash
 from dash import html, dcc
 import dash_bootstrap_components as dbc
+import dash_auth
+
 
 VALID_USERNAME_PASSWORD_PAIRS = {
     'alphega': 'alphega'
