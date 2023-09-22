@@ -1,9 +1,24 @@
 import dash
-from dash import html, dcc
+from dash import html, dcc, Output, Input, State
 import dash_bootstrap_components as dbc
+
+
+VALID_USERNAME = '1'
+VALID_PASSWORD = '1'
+
 
 app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.SPACELAB])
 server = app.server
+login_layout = html.Div([
+    dbc.Card([
+        html.H3("Login", className="card-title"),
+        dcc.Input(id='username-input', type='text', placeholder='Username'),
+        dcc.Input(id='password-input', type='password', placeholder='Password'),
+        html.Div(id='login-status', children=''),
+        html.Button('Login', id='login-button', n_clicks=0, className="btn btn-primary mt-3")
+
+    ], body=True, style={'width': '300px', 'margin': 'auto', 'marginTop': '100px'})
+])
 
 sidebar = dbc.Nav(
             [
@@ -21,7 +36,7 @@ sidebar = dbc.Nav(
             className="bg-light",
 )
 
-app.layout = dbc.Container([
+main_layout = dbc.Container([
     dbc.Row([
         dbc.Col(
                 [
@@ -48,6 +63,41 @@ app.layout = dbc.Container([
         ]
     )
 ], fluid=True)
+
+app.layout = html.Div([
+    dcc.Location(id='url', refresh=False),
+    html.Div(id='page-content')
+])
+
+@app.callback(
+    Output('page-content', 'children'),
+    Input('url', 'pathname')
+)
+def display_page(pathname):
+    if pathname == '/':
+        return login_layout
+    elif pathname == '/main':
+        return main_layout
+    else:
+        return '404 Page Not Found'
+
+
+@app.callback(
+    Output('login-status', 'children'),
+    Output('url', 'pathname'),
+    Input('login-button', 'n_clicks'),
+    State('username-input', 'value'),
+    State('password-input', 'value')
+)
+def handle_login(n_clicks, username, password):
+    if n_clicks == 0:
+        return '', '/'
+
+    if username == VALID_USERNAME and password == VALID_PASSWORD:
+        return 'Login successful', '/main'
+    else:
+        return 'Invalid username or password', '/'
+
 
 
 if __name__ == "__main__":
